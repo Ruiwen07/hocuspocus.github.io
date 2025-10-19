@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Timer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .study-timer { margin-top: 20px; }
+        button { padding: 5px 10px; margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Name Thingy</h1>
+
+<div class="study-timer">
+    <h2>Select Your Preferred Study Length!</h2>
+    <select id="timer">
+        <option value="">--Select--</option>
+        <option value="Test">--Test--</option>
+        <option value="Short">--Short--</option>
+        <option value="Medium">--Medium--</option>
+        <option value="Long">--Long--</option>
+    </select>
+    <button id="start">Start Studying</button>
+    <p id="status"></p>
+</div>
+
+<script>
+document.getElementById("start").addEventListener("click", () => {
+    const timer = document.getElementById("timer").value;
+    if (!timer) {
+        alert("Please select a timer.");
+        return;
+    }
+
+    fetch("/startTimer", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `timer=${timer}`
+    })
+    .then(response => response.text())
+    .then(msg => {
+        document.getElementById("status").innerText = msg;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("status").innerText = "Error";
+    });
+});
+</script>
+
+</body>
+</html>
